@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/api/v1/member")
 public class UserController {
 
-    @PostMapping("/login")
+    @PostMapping("/login") //로그인 기능
     public ResponseEntity<String> login(@RequestBody UserLoginDTO userLoginDTO, HttpServletRequest request) {
         String username = userLoginDTO.getUsername();
         String password = userLoginDTO.getPassword();
