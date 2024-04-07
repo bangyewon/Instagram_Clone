@@ -21,9 +21,19 @@ public class UserController {
         if (username != null && password != null) {
             HttpSession session = request.getSession();
             session.setAttribute("username", username);
-            return ResponseEntity.ok("로그인이 성공적으로 됨 ");
+            return ResponseEntity.ok("로그인이 성공적으로 되었습니다. ");
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("다시 로그인해 주세요");
+        }
+    }
+    @PostMapping("/logout") // 로그아웃 기능
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false); // 세션이 없으면 null 반환
+        if (session != null) {
+            session.invalidate(); // 세션 무효화
+            return ResponseEntity.ok("로그아웃이 되었습니다.");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("세션이 없습니다.");
         }
     }
 }

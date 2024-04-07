@@ -21,7 +21,7 @@ public class UserLoginDTO {
         return User .builder()
                 .email(email)
                 .phone(phone)
-                .passward(password)
+                .password(password)
                 .username(username)
                 .build();
     }
