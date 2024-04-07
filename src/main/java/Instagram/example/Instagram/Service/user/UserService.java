@@ -4,11 +4,13 @@ import Instagram.example.Instagram.Repository.user.UserRepository;
 import Instagram.example.Instagram.domain.user.User;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
 public class UserService {
+    @Autowired
     private UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
@@ -29,6 +31,9 @@ public class UserService {
 
     public void logout(HttpSession session) {
         session.removeAttribute("user"); //로그아웃하면 user삭제
+    }
+    public User getLoggedInUser(HttpSession session) {
+        return (User) session.getAttribute("user"); //세션에 사용자 정보 반환 -> 테스트 코드 사용
     }
 
     //회원 조회
