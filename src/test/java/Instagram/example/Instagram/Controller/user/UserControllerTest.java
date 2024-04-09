@@ -3,10 +3,9 @@ package Instagram.example.Instagram.Controller.user;
 import Instagram.example.Instagram.Repository.user.UserRepository;
 import Instagram.example.Instagram.Service.user.UserService;
 import Instagram.example.Instagram.domain.user.User;
-import Instagram.example.Instagram.web.dto.user.UserLoginDTO;
+import Instagram.example.Instagram.web.dto.user.UserResponseDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
@@ -15,7 +14,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.junit.jupiter.api.Assertions.*;
 @AutoConfigureMockMvc
 class UserControllerTest {
 
@@ -42,9 +40,9 @@ class UserControllerTest {
                 .build();
         userRepository.save(user);
 
-        UserLoginDTO userLoginDTO = new UserLoginDTO();
-        userLoginDTO.setUsername(username);
-        userLoginDTO.setPassword(password);
+        UserResponseDTO userResponseDTO = new UserResponseDTO();
+        userResponseDTO.setUsername(username);
+        userResponseDTO.setPassword(password);
 
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/member/login")
@@ -65,4 +63,5 @@ class UserControllerTest {
     @Test
     void 회원조회() {
     }
+
 }

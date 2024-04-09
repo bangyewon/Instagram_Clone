@@ -1,4 +1,4 @@
-package Instagram.example.Instagram.Service;
+package Instagram.example.Instagram.web;
 import Instagram.example.Instagram.Repository.user.UserRepository;
 import Instagram.example.Instagram.domain.user.User;
 import org.springframework.beans.factory.annotation.Autowired;

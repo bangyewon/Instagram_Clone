@@ -1,8 +1,9 @@
 package Instagram.example.Instagram.Controller.user;
 
 import Instagram.example.Instagram.Repository.user.UserRepository;
+import Instagram.example.Instagram.Service.user.UserService;
 import Instagram.example.Instagram.domain.user.User;
-import Instagram.example.Instagram.web.dto.user.UserLoginDTO;
+import Instagram.example.Instagram.web.dto.user.UserResponseDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class UserController {
 
     private final UserRepository userRepository;
+    private UserService userService;
     @Autowired
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -26,9 +28,9 @@ public class UserController {
 
 
     @PostMapping("/login") //로그인 기능
-    public ResponseEntity<String> login(@RequestBody UserLoginDTO userLoginDTO, HttpServletRequest request) {
-        String username = userLoginDTO.getUsername();
-        String password = userLoginDTO.getPassword();
+    public ResponseEntity<String> login(@RequestBody UserResponseDTO userResponseDTO, HttpServletRequest request) {
+        String username = userResponseDTO.getUsername();
+        String password = userResponseDTO.getPassword();
         if (username != null && password != null) {
             HttpSession session = request.getSession();
             session.setAttribute("username", username);
@@ -41,7 +43,7 @@ public class UserController {
     public ResponseEntity<String> logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false); // 세션이 없으면 null 반환
         if (session != null) {
-            session.invalidate(); // 세션 무효화
+            session.invalidate(); // 세션 무효화 시키기
             return ResponseEntity.ok("로그아웃이 되었습니다.");
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("세션이 없습니다.");
@@ -56,6 +58,33 @@ public class UserController {
         else {
             return ResponseEntity.notFound().build(); // 못찾음
         }
+
     }
+    @PostMapping("/join") // 회원 가입
+    public ResponseEntity<String> register(@RequestBody UserResponseDTO userResponseDTO) {
+        // 사용자 정보를 User 엔티티로 변환하여 저장
+        User newUser = userRepository.save(userResponseDTO.toEntity());
+        if (newUser != null) {
+            return ResponseEntity.ok("회원 가입이 완료되었습니다.");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 가입에 실패하였습니다.");
+        }
+    }
+    @PostMapping("/update") // 회원 수정
+    public ResponseEntity<String> updateUser(@RequestBody UserResponseDTO userResponseDTO) {
+        User existingUser = userService.findUserByUsername(userResponseDTO.getUsername());
+        if (existingUser != null) {
+            //유저 있으면 수정 가능
+            existingUser.setEmail(userResponseDTO.getEmail());
+            existingUser.setName(userResponseDTO.getUsername());
+            existingUser.setPhone(userResponseDTO.getPhone());
+
+            userRepository.save(existingUser);
+            return ResponseEntity.ok("회원 정보가 수정되었습니다.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 사용자를 찾을 수 없습니다.");
+        }
+    }
+
 
 }
