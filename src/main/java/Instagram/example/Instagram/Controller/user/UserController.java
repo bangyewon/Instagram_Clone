@@ -31,6 +31,7 @@ public class UserController {
     public ResponseEntity<String> login(@RequestBody UserResponseDTO userResponseDTO, HttpServletRequest request) {
         String username = userResponseDTO.getUsername();
         String password = userResponseDTO.getPassword();
+
         if (username != null && password != null) {
             HttpSession session = request.getSession();
             session.setAttribute("username", username);
