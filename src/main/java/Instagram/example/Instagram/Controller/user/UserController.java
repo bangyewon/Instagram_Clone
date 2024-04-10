@@ -83,9 +83,22 @@ public class UserController {
             userRepository.save(existingUser);
             return ResponseEntity.ok("회원 정보가 수정되었습니다.");
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 사용자를 찾을 수 없습니다.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
         }
     }
-
+    @PostMapping("/delete") // 회원 탈퇴
+    public ResponseEntity<String> withdraw(@RequestParam("username") String username, HttpServletRequest request) {
+        User existingUser = userService.findUserByUsername(username);
+        if (existingUser != null) {
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                session.invalidate(); // 세션 무효화 시키기
+            }
+            userRepository.delete(existingUser);
+            return ResponseEntity.ok("회원 탈퇴가 완료되었습니다.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
+        }
+    }
 
 }
