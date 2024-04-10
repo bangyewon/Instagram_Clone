@@ -63,4 +63,14 @@ public class UserService {
             return null; // 존재하지 않는 사용자일 경우 null 반환
         }
     }
+    // 회원 탈퇴
+    public boolean DeletedUser(String username) {
+        User existingUser = userRepository.findOneByUsername(username);
+        if (existingUser != null) {
+            userRepository.delete(existingUser);
+            return true; // 탈퇴
+        } else { //existingUser  == null -> 존재하지 않는 사용자
+            return false; // 존재하지 않는 사용자일 경우 탈퇴 실패
+        }
+    }
 }
