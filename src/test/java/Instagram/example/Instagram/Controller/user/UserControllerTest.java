@@ -7,7 +7,10 @@ import Instagram.example.Instagram.web.dto.user.UserResponseDTO;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.auditing.CurrentDateTimeProvider;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,22 +26,21 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
-
+@SpringBootTest
 @AutoConfigureMockMvc
 class UserControllerTest {
 
 
     private MockMvc mockMvc;
-//@Autowired
-    private UserService userService;
 
+    private UserService userService;
+    @Autowired
     private UserRepository userRepository;
 
     private MockHttpSession session;
     @BeforeEach
     void setUp() {
-        // mockMvc 초기화 - 에러방지
-        this.mockMvc = MockMvcBuilders.standaloneSetup(new UserController(userRepository)).build();
+        this.mockMvc = MockMvcBuilders.standaloneSetup(new UserController(userRepository,userService)).build();
     }
     @Test
     void login() throws Exception {
@@ -72,8 +74,10 @@ class UserControllerTest {
 
     @Test
     void 전체_회원조회() {
-        User user1 = new User(1, "user1", "0000", "user1@email", "user1", "profile", "010-0000-0000", LocalDateTime.now());
-        User user2 = new User(2, "user2", "0000", "user2@email", "user2", "profile", "010-0000-0000", LocalDateTime.now());
+        User user1 = new User(1, "user1", "0000", "user1@email",
+                "user1", "profile", "010-0000-0000", LocalDateTime.now());
+        User user2 = new User(2, "user2", "0000", "user2@email",
+                "user2", "profile", "010-0000-0000", LocalDateTime.now());
 
         userRepository.save(user1);
         userRepository.save(user2);
