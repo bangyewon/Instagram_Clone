@@ -21,9 +21,11 @@ public class UserController {
     private final UserRepository userRepository;
     private UserService userService;
     @Autowired
-    public UserController(UserRepository userRepository) {
+    public UserController(UserRepository userRepository, UserService userService) {
         this.userRepository = userRepository;
+        this.userService = userService;
     }
+
 
 
     @PostMapping("/login") //로그인 기능
