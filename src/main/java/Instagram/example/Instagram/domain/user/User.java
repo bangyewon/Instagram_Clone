@@ -17,17 +17,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 번호 증가 -> db를 따라가도록
     private int id;
 
-    @Column(length = 10, unique = true)
+    @Column(length = 10, unique = true,nullable = false)
     private String username;
 
     @Column(length = 10, nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    private String email;
-    private String name;
+//    @Column(nullable = false)
 
     @Column(nullable = true)
+    private String email;
     private String profileImage;
     private String phone;
 

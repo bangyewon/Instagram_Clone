@@ -55,7 +55,7 @@ public class UserService {
         User existingUser = userRepository.findOneByUsername(userResponseDTO.getUsername());
         if (existingUser != null) {
             existingUser.setEmail(userResponseDTO.getEmail());
-            existingUser.setName(userResponseDTO.getUsername());
+            existingUser.setUsername(userResponseDTO.getUsername());
             // 필요한 정보에 대해 추가적인 수정 작업을 수행할 수 있습니다.
             return userRepository.save(existingUser);
         } else {

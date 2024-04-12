@@ -78,7 +78,7 @@ public class UserController {
         if (existingUser != null) {
             //유저 있으면 수정 가능
             existingUser.setEmail(userResponseDTO.getEmail());
-            existingUser.setName(userResponseDTO.getUsername());
+            existingUser.setUsername(userResponseDTO.getUsername());
             existingUser.setPhone(userResponseDTO.getPhone());
 
             userRepository.save(existingUser);
