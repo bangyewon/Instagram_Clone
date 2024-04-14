@@ -64,9 +64,9 @@ class UserControllerTest {
 
     @Test
     void 전체_회원조회() {
-        User user1 = new User(1, "user1", "0000", "user1@email",
+        User user1 = new User( 1, "0000", "user1@email",
                 "user1", "profile", "010-0000-0000", LocalDateTime.now());
-        User user2 = new User(2, "user2", "0000", "user2@email",
+        User user2 = new User( 2, "0000", "user2@email",
                 "user2", "profile", "010-0000-0000", LocalDateTime.now());
 
         userRepository.save(user1);
