@@ -3,6 +3,7 @@ package Instagram.example.Instagram.Controller.user;
 import Instagram.example.Instagram.Repository.user.UserRepository;
 import Instagram.example.Instagram.Service.user.UserService;
 import Instagram.example.Instagram.domain.user.User;
+import Instagram.example.Instagram.web.dto.user.UserRequestDTO;
 import Instagram.example.Instagram.web.dto.user.UserResponseDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -62,10 +63,11 @@ public class UserController {
         }
 
     }
+    //회원 가입 등 서버에 요청하는 기능이므로 RequestDTO 사용이 적합
     @PostMapping("/join") // 회원 가입
-    public ResponseEntity<String> register(@RequestBody UserResponseDTO userResponseDTO) {
+    public ResponseEntity<String> register(@RequestBody UserRequestDTO userRequestDTO) {
         // 사용자 정보를 User 엔티티로 변환하여 저장
-        User newUser = userRepository.save(userResponseDTO.toEntity());
+        User newUser = userRepository.save(userRequestDTO.toEntity());
         if (newUser != null) {
             return ResponseEntity.ok("회원 가입이 완료되었습니다.");
         } else {
@@ -73,13 +75,13 @@ public class UserController {
         }
     }
     @PostMapping("/update") // 회원 수정
-    public ResponseEntity<String> updateUser(@RequestBody UserResponseDTO userResponseDTO) {
-        User existingUser = userService.findUserByUsername(userResponseDTO.getUsername());
+    public ResponseEntity<String> updateUser(@RequestBody UserRequestDTO userRequestDTO) {
+        User existingUser = userService.findUserByUsername(userRequestDTO.getUsername());
         if (existingUser != null) {
             //유저 있으면 수정 가능
-            existingUser.setEmail(userResponseDTO.getEmail());
-            existingUser.setUsername(userResponseDTO.getUsername());
-            existingUser.setPhone(userResponseDTO.getPhone());
+            existingUser.setEmail(userRequestDTO.getEmail());
+            existingUser.setUsername(userRequestDTO.getUsername());
+            existingUser.setPhone(userRequestDTO.getPhone());
 
             userRepository.save(existingUser);
             return ResponseEntity.ok("회원 정보가 수정되었습니다.");

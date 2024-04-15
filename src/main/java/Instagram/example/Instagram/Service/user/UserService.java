@@ -2,6 +2,7 @@ package Instagram.example.Instagram.Service.user;
 
 import Instagram.example.Instagram.Repository.user.UserRepository;
 import Instagram.example.Instagram.domain.user.User;
+import Instagram.example.Instagram.web.dto.user.UserRequestDTO;
 import Instagram.example.Instagram.web.dto.user.UserResponseDTO;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -41,21 +42,21 @@ public class UserService {
         return userRepository.findOneByUsername(username);
     }
     //회원 가입
-    public User registerUser(UserResponseDTO userResponseDTO) {
+    public User registerUser(UserRequestDTO userRequestDTO) {
         // 이미 존재하는 사용자인지 확인
-        if (userRepository.existsByUsername(userResponseDTO.getUsername())) {
+        if (userRepository.existsByUsername(userRequestDTO.getUsername())) {
             // 이미 존재하는 사용자일 경우 null 반환
             return null;
         }
-        User newUser = userResponseDTO.toEntity();
+        User newUser = userRequestDTO.toEntity();
         return userRepository.save(newUser); // 저장 후 로그인 창으로 redirect ?
     }
     //회원 수정
-    public User updateUser(UserResponseDTO userResponseDTO) {
-        User existingUser = userRepository.findOneByUsername(userResponseDTO.getUsername());
+    public User updateUser(UserRequestDTO userRequestDTO) {
+        User existingUser = userRepository.findOneByUsername(userRequestDTO.getUsername());
         if (existingUser != null) {
-            existingUser.setEmail(userResponseDTO.getEmail());
-            existingUser.setUsername(userResponseDTO.getUsername());
+            existingUser.setEmail(userRequestDTO.getEmail());
+            existingUser.setUsername(userRequestDTO.getUsername());
             // 필요한 정보에 대해 추가적인 수정 작업을 수행할 수 있습니다.
             return userRepository.save(existingUser);
         } else {
