@@ -1,5 +1,6 @@
 package Instagram.example.Instagram.domain.Image;
 
+import Instagram.example.Instagram.domain.likes.Likes;
 import Instagram.example.Instagram.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
@@ -9,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -28,9 +30,21 @@ public class Image {
     @JoinColumn(name = "userId") //userId 외래키 - user와 매핑
     private User user;
 
-    //좋아요 기능
+    // 좋아요 기능
+    @JsonIgnoreProperties({"image"})
+    @OneToMany(mappedBy = "image") // 하나의 이미지에 여러 좋아요 달리기 가능
+    private List<Likes> likes;
+
+    // 좋아요 여부
+    @Transient //JPA 엔티티에서 특정 클래스 특정 필드를 db와 매핑 안함 / db저장 x, entity 일부로 간주 x
+    private boolean likeState;
+
+    // 좋아요 수
+    @Transient
+    private int likeCount;
 
 
     @Column(nullable = false)
     private LocalDateTime createDate;
+
 }
