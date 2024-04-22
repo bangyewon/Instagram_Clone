@@ -13,6 +13,10 @@ public class ImageService {
     @Autowired
     private ImageRepository imageRepository;
 
+    // 이미지 ID를 사용하여 이미지를 조회 -> 상세 이미지
+    public Optional<Image> getImageById(int id) {
+        return imageRepository.findById(id);
+    }
 
     // 모든 이미지 조회 - 테스트 용
     public List<Image> getAllImages() {
@@ -23,5 +27,6 @@ public class ImageService {
     public List<Image> getImagesByTag(String tag) {
         return imageRepository.findByTagsName(tag);
     }
+
 
 }
