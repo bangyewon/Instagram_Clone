@@ -32,7 +32,7 @@ public class Likes {
 
     private LocalDateTime createDate;
 
-    @PrePersist // db에 넣을때 가입날짜가  - db에 값 넣으면 자동실행됨
+    @PrePersist // db에 값 넣으면 자동실행
     public void createDate() {
         this.createDate = LocalDateTime.now();
     }

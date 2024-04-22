@@ -30,6 +30,11 @@ public class Image {
     @JoinColumn(name = "userId") //userId 외래키 - user와 매핑
     private User user;
 
+    //이미지 태그
+    @JsonIgnoreProperties({"image"})
+    @OneToMany(mappedBy = "image")
+    private List<Tag> tags;
+
     // 좋아요 기능
     @JsonIgnoreProperties({"image"})
     @OneToMany(mappedBy = "image") // 하나의 이미지에 여러 좋아요 달리기 가능
@@ -46,5 +51,10 @@ public class Image {
 
     @Column(nullable = false)
     private LocalDateTime createDate;
+
+    @PrePersist
+    public void createDate() {
+        this.createDate = LocalDateTime.now();
+    }
 
 }
