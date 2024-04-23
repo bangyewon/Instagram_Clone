@@ -3,6 +3,7 @@ package Instagram.example.Instagram.Controller.Image;
 import Instagram.example.Instagram.Repository.Image.ImageRepository;
 import Instagram.example.Instagram.Service.Image.ImageService;
 import Instagram.example.Instagram.domain.Image.Image;
+import Instagram.example.Instagram.web.dto.Image.ImageUploadDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,22 @@ public class ImageController {
     public ImageController(ImageService imageService) {
         this.imageService = imageService;
     }
+    //이미지 업로드
+    @GetMapping("/upload/post")
+    public String upload() {
+        return "/upload/post";
+    }
+    @PostMapping("/upload")
+    public String imageUpload(ImageUploadDTO imageUploadDTO, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+
+        if (imageUploadDTO.getFile().isEmpty()) {
+            throw new CustomValidationException("이미지가 첨부되지 않았습니다.", null);
+        }
+        imageService.imageUpload(imageUploadDTO, principalDetails);
+
+        return "redirect:/user/" + principalDetails.getUser().getId();
+    }
+
     //태그로 이미지 조회
     @GetMapping("/ByTag")
     // "/api/v1/images/ByTags=태그명"으로 이미지 조회 가능
