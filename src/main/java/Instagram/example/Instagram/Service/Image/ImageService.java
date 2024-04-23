@@ -2,38 +2,47 @@ package Instagram.example.Instagram.Service.Image;
 
 import Instagram.example.Instagram.Repository.Image.ImageRepository;
 import Instagram.example.Instagram.domain.Image.Image;
+import Instagram.example.Instagram.domain.user.User;
+import Instagram.example.Instagram.web.dto.Image.ImageUploadDTO;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ImageService {
     @Autowired
     private ImageRepository imageRepository;
+    private static final String Upload_image = "src/main/resources/UploadImages"; //업로드된 이미지들이 저장될 경로
 
-    //이미지 업로드
-    public void imageUpload(ImageUploadDTO imageUploadDTO, PrincipalDetails principalDetails) {
+    // 이미지 업로드
+    public void imageUpload(MultipartFile file) {
+        // 파일이 비어있는지 확인
+        if (file.isEmpty()) {
+            throw new IllegalArgumentException("이미지가 첨부되지 않았습니다.");
+        }
+
         try {
-            // 클라이언트로부터 받은 이미지 파일
-            MultipartFile imageFile = imageUploadDTO.getFile();
+            // UUID로 사용자가 겹치지않도록 고유 파일이름 생성하기
+            String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
 
-            // 클라이언트로부터 받은 이미지와 관련된 정보
-            String title = imageUploadDTO.getTitle();
-            String description = imageUploadDTO.getDescription();
-            List<String> tags = imageUploadDTO.getTags();
-            String category = imageUploadDTO.getCategory();
-            String uploaderId = principalDetails.getUser().getId();
+            // 파일 저장 경로 설정
+            Path filePath = Paths.get(Upload_image, fileName);
 
-            // 이미지 업로드 처리
-            imageRepository.uploadImage(imageFile, title, description, tags, category, uploaderId);
+            // 파일 저장
+            Files.copy(file.getInputStream(), filePath);
         } catch (IOException e) {
-            // 이미지 업로드 중 오류 발생 시 예외 처리
-            e.printStackTrace();
-            // 예외 처리 코드 추가
+            throw new RuntimeException("이미지 업로드 중 오류가 발생했습니다.", e);
         }
     }
 
