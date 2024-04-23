@@ -26,23 +26,18 @@ public class ImageController {
     }
     //이미지 업로드
     @PostMapping("/upload")
-    public String imageUpload(ImageUploadDTO imageUploadDTO, HttpServletRequest request) {
-        HttpSession session = request.getSession();
+    //user와 연결시켜야함  ImageUploadDTO
+    public String imageUpload(ImageUploadDTO imageUploadDTO) {
 
         if (imageUploadDTO.getFile().isEmpty()) {
             String errorMessage = "이미지가 첨부되지 않음";
-            //세션으로 에러메세지 전달 후 다시 upload 할 수 있도록
-            session.setAttribute("uploadErrorMessage", errorMessage);
-            return "redirect:/upload";
+            return "redirect:/upload?error="+errorMessage; //에러 메세지 url 파라미터로 전달
         }
 
-        // 세션에서 사용자 정보를 가져옴
-        User user = (User) session.getAttribute("currentUser");
-
         // 이미지 업로드 서비스 호출
-        imageService.imageUpload(imageUploadDTO.getFile(),user);
+        imageService.imageUpload(imageUploadDTO.getFile());
 
-        return "redirect:/user/" + user.getId();
+        return "redirect:/upload/{id}"; //업로드된 게시물로
     }
 //태그로 이미지 조회
 @GetMapping("/ByTag")
