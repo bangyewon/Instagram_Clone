@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.io.File;
 import java.util.List;
 import java.util.Optional;
@@ -27,15 +28,18 @@ public class ImageController {
     //이미지 업로드
     @PostMapping("/upload")
     //user와 연결시켜야함  ImageUploadDTO
-    public String imageUpload(ImageUploadDTO imageUploadDTO) {
+    public String imageUpload(ImageUploadDTO imageUploadDTO,HttpServletRequest request) {
+        HttpSession session = request.getSession();
 
         if (imageUploadDTO.getFile().isEmpty()) {
             String errorMessage = "이미지가 첨부되지 않음";
             return "redirect:/upload?error="+errorMessage; //에러 메세지 url 파라미터로 전달
         }
+        // 세션에서 사용자 정보 가져오기
+        User user = (User) session.getAttribute("currentUser");
 
-        // 이미지 업로드 서비스 호출
-        imageService.imageUpload(imageUploadDTO.getFile());
+        // 이미지 업로드 호출
+        imageService.imageUpload(imageUploadDTO.getFile(),user);
 
         return "redirect:/upload/{id}"; //업로드된 게시물로
     }
