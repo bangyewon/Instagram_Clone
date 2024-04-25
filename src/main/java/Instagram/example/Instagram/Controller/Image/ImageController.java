@@ -38,7 +38,7 @@ public class ImageController {
         // 세션에서 사용자 정보 가져오기
         User user = (User) session.getAttribute("currentUser");
 
-        // 이미지 업로드 서비스 호출
+        // 이미지 업로드 호출
         imageService.imageUpload(imageUploadDTO.getFile(),user);
 
         return "redirect:/upload/{id}"; //업로드된 게시물로

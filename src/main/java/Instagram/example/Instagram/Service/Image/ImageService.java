@@ -26,14 +26,14 @@ public class ImageService {
     private static final String Upload_image = "src/main/resources/UploadImages"; //업로드된 이미지들이 저장될 경로
 
     // 이미지 업로드
-    public void imageUpload(MultipartFile file, User user) {
+    public String imageUpload(MultipartFile file, User user) {
         // 파일이 비어있는지 확인
         if (file.isEmpty()) {
-            throw new IllegalArgumentException("이미지가 첨부되지 않았습니다.");
+            return "이미지가 첨부되지 않았습니다.";
         }
 
         if (user == null) {
-            throw new IllegalArgumentException("로그인이 필요합니다.");
+            return "로그인 필요";
         }
 
         try {
@@ -50,6 +50,7 @@ public class ImageService {
             Image image = new Image();
             image.setUser(user); // 현재 로그인한 사용자와 이미지 연결
             imageRepository.save(image);
+            return "업로드 완료";
         } catch (IOException e) {
             throw new RuntimeException("이미지 업로드 중 오류가 발생했습니다.", e);
         }
