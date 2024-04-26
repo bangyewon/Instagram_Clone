@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface ImageRepository extends JpaRepository<Image,Integer> {
     //태그로 게시물 검색
     List<Image> findByTagsName(String tagName);
+
     // 이미지 저장
     Image save(Image image);
 }

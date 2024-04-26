@@ -21,12 +21,12 @@ public class UserController {
 
     private final UserRepository userRepository;
     private UserService userService;
+
     @Autowired
     public UserController(UserRepository userRepository, UserService userService) {
         this.userRepository = userRepository;
         this.userService = userService;
     }
-
 
 
     @PostMapping("/login") //로그인 기능
@@ -42,6 +42,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("다시 로그인해 주세요");
         }
     }
+
     @PostMapping("/logout") // 로그아웃 기능
     public ResponseEntity<String> logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false); // 세션이 없으면 null 반환
@@ -52,17 +53,18 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("세션이 없습니다.");
         }
     }
+
     @PostMapping("/findOne") // 회원 조회
     public ResponseEntity<User> findOneByUsername(@RequestParam("username") String username) {
         User user = userRepository.findOneByUsername(username);
-        if(user != null) {
+        if (user != null) {
             return ResponseEntity.ok(user); //찾음
-        }
-        else {
+        } else {
             return ResponseEntity.notFound().build(); // 못찾음
         }
 
     }
+
     //회원 가입 등 서버에 요청하는 기능이므로 RequestDTO 사용이 적합
     @PostMapping("/join") // 회원 가입
     public ResponseEntity<String> register(@RequestBody UserRequestDTO userRequestDTO) {
@@ -74,6 +76,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 가입에 실패하였습니다.");
         }
     }
+
     @PostMapping("/update") // 회원 수정
     public ResponseEntity<String> updateUser(@RequestBody UserRequestDTO userRequestDTO) {
         User existingUser = userService.findUserByUsername(userRequestDTO.getUsername());
@@ -89,6 +92,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
         }
     }
+
     @PostMapping("/delete") // 회원 탈퇴
     public ResponseEntity<String> withdraw(@RequestParam("username") String username, HttpServletRequest request) {
         User existingUser = userService.findUserByUsername(username);
@@ -103,6 +107,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
         }
     }
+
     //테스트 용
     @GetMapping("/findAll")
     public ResponseEntity<List<User>> findAllUsers() {

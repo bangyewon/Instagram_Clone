@@ -61,6 +61,11 @@ public class ImageService {
     public List<Image> getImagesByTag(String tag) {
         return imageRepository.findByTagsName(tag);
     }
+    // 이미지(게시물) 삭제
+    @Transactional
+    public void deleteImage(int id,User user) throws Exception {
+            imageRepository.deleteById(id);
+    }
 
 
 }
