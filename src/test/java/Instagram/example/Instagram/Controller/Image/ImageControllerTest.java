@@ -11,6 +11,7 @@ import Instagram.example.Instagram.web.dto.Image.ImageUploadDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
@@ -31,6 +32,7 @@ class ImageControllerTest {
     void setUp() {
         imageService = mock(ImageService.class);
         imageController = new ImageController(imageService);
+        MockitoAnnotations.openMocks(this);
     }
     @Test
     void 게시물_업로드() {
