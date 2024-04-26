@@ -39,7 +39,7 @@ public class ImageController {
         User user = (User) session.getAttribute("currentUser");
 
         // 이미지 업로드 호출
-        imageService.imageUpload(imageUploadDTO.getFile(),user);
+        imageService.imageUpload(imageUploadDTO.getFile(),request);
 
         return "redirect:/upload/{id}"; //업로드된 게시물로
     }
