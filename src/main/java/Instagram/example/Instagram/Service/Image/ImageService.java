@@ -66,6 +66,24 @@ public class ImageService {
     public void deleteImage(int id,User user) throws Exception {
             imageRepository.deleteById(id);
     }
-
+    // 이미지(게시물) 수정
+    @Transactional
+    public void updateImage(int id, String caption, String location,User user) throws Exception {
+        Optional<Image> optionalImage = imageRepository.findById(id);
+        if (optionalImage.isPresent()) {
+            Image image = optionalImage.get();
+            if (image.getUser().equals(user)) {
+                // 싱세설명,위치 업데이트
+                image.setCaption(caption);
+                image.setLocation(location);
+                //이미지 저장
+                imageRepository.save(image);
+            } else {
+                throw new Exception("게시물 작성자가 아닙니다.");
+            }
+        } else {
+            throw new Exception("해당 게시물을 찾을 수 없습니다.");
+        }
+    }
 
 }
