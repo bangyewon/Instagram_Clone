@@ -48,7 +48,7 @@ public class ImageController {
     }
 
     // 게시물 삭제
-    @DeleteMapping("/{id}")
+    @DeleteMapping("delete/{id}")
     public ResponseEntity<String> deleteImage(@PathVariable int id, HttpSession session) {
         User user = (User) session.getAttribute("user");
         if (user == null) { // 해당 user가 삭제할 수 있도록
@@ -85,5 +85,25 @@ public class ImageController {
             return ResponseEntity.notFound().build();
         }
     }
+    // 이미지 수정
+    @PutMapping("update/{id}") // 리소스 상태,데이터 업데이트시 PutMapping
+    //@PathVariable로 고유 url경로에서 이미지id 갖고오기
+    //caption,location은 필수 수정이 아닌 선택 수정 매개변수
+    public ResponseEntity<String> updateImage(@PathVariable int id,
+                                              @RequestParam(value = "caption", required = false) String caption,
+                                              @RequestParam(value = "location", required = false) String location,
+                                              HttpSession session) {
+        // 세션에서 정보 가져옴
+        User user = (User) session.getAttribute("currentUser");
+
+        try {
+            imageService.updateImage(id, caption, location, user);
+            return ResponseEntity.ok("게시물이 성공적으로 수정되었습니다.");
+        } catch (Exception e) {
+            // 오류나면 404 반환
+            return ResponseEntity.badRequest().body("게시물 수정 중 오류가 발생했습니다.");
+        }
+    }
+
 }
 
