@@ -104,6 +104,5 @@ public class ImageController {
             return ResponseEntity.badRequest().body("게시물 수정 중 오류가 발생했습니다.");
         }
     }
-
 }
 
